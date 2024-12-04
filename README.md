@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Branch Intl Support
 
-## Getting Started
+A messaging web application built as a take away assignment for Branch International. The application is built using Next JS, Firebase and Tailwind CSS.
 
-First, run the development server:
+- To run the app locally, follow the steps below:\
+  `yarn install` \
+  `yarn dev`
+- The app should be available on localhost:3000
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Key Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1. Agents
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Agents can login from the ui and will be assigned a unique uuid. This uuid will be used to identify the agent in the database. The agent will be able to see all the conversations assigned to them or if the conversation is unassigned.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 2. Messaging
 
-## Learn More
+- Initially, a conversation will be unassigned to any agent. The first agent to respond to the conversation will be assigned the conversation.
+- When an agent responds to a conversation, the conversation will be assigned to them and the conversation will be visible only to them.
+- This prevents multiple agents from responding to the same conversation.
 
-To learn more about Next.js, take a look at the following resources:
+### 3. Data Handling
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- I'm using Firebase Firestore to store the data. The data is structured as follows:
+  1. Conversations: This collection stores all the conversations. Each conversation has a unique id and the following fields:
+     - id: The unique id of the conversation.
+     - agentuuid: The id of the agent assigned to the conversation.
+     - messages: An array of messages in the conversation.
+     - timestarted: The time the conversation was started.
+  2. Agents: This collection stores all the agents. Each agent has a unique id and the following fields:
+     - id: The unique id of the agent.
+     - name: The name of the agent.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. User Interface and Serverless API
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The UI was built using Next JS and Tailwind and Next 14's [serverless functions](https://clouddevs.com/next/serverless-functions/#:~:text=full%2Dstack%20applications.-,NEXT.,need%20for%20separate%20backend%20services.)
