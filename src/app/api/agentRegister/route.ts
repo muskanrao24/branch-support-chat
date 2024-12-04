@@ -2,7 +2,7 @@
 // It expects [ username, UUID, role ] and returns a unique ID for the user in the database
 // UUID is a unique identifier that is created from the UI side
 
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, getDocs } from "firebase/firestore";
 import { firestore } from "../configs/firebaseconfig";
 
 export async function POST(request: Request) {
@@ -25,6 +25,15 @@ export async function POST(request: Request) {
     }
   } else {
     try {
+      // Check if the username already exists\
+      const querySnapshot = await getDocs(collection(firestore, "customers"));
+      querySnapshot.forEach((doc) => {
+        if (doc.data().username === body.username) {
+          return new Response(JSON.stringify({ dbId: doc.id }), {
+            status: 200,
+          });
+        }
+      });
       const docRef = await addDoc(collection(firestore, "customers"), {
         username: body?.["username"] || `Customer ${body["UUID"]}`,
         uuid: body["UUID"],

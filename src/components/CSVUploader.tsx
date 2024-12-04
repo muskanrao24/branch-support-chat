@@ -20,13 +20,22 @@ const CSVUploader = () => {
         const batch = writeBatch(db);
 
         queries.forEach((query: any) => {
-          const queryRef = doc(collection(db, "queries"));
-          batch.set(queryRef, {
-            text: query["Message Body"],
-            assignedTo: null, // Initially unassigned
-            createdAt: query["Timestamp (UTC)"],
-            customerId: query["User ID"],
-          });
+          const conversationRef = doc(collection(db, "conversations"));
+          const newConversation = {
+            agentuuid: "",
+            senderuuid: query["User ID"],
+            timestarted: query["Timestamp (UTC)"],
+            username: query["User ID"],
+            messages: [
+              {
+                content: query["Message Body"],
+                senderuuid: query["User ID"],
+                timestamp: query["Timestamp (UTC)"],
+              },
+            ],
+          };
+
+          batch.set(conversationRef, newConversation);
         });
 
         try {
